@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -79,7 +80,7 @@ export default async function CustomerDetailPage(props: PageProps<'/app/[tenant]
         <ArrowLeft className='size-3' /> Clientes
       </Link>
       <PageHeader
-        eyebrow={`Cliente desde ${format(customer.createdAt, "MMMM 'de' yyyy", { locale: es })}`}
+        eyebrow={`Cliente desde ${format(customer.createdAt, "MMMM 'de' yyyy", { locale: es, in: tz(ctx.tenant.timezone) })}`}
         title={
           <span className='flex items-center gap-3'>
             <span className='flex size-11 shrink-0 items-center justify-center rounded-full bg-gold/15 font-sans text-sm font-semibold text-gold-deep ring-1 ring-gold/30 dark:text-gold'>
@@ -216,11 +217,11 @@ export default async function CustomerDetailPage(props: PageProps<'/app/[tenant]
                                 <span className='font-mono font-medium'>{folio('V', o.number)}</span>
                               )}
                               <span className='block text-[0.65rem] text-muted-foreground sm:hidden'>
-                                {format(o.createdAt, 'd MMM yyyy', { locale: es })}
+                                {format(o.createdAt, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}
                               </span>
                             </TableCell>
                             <TableCell className='hidden text-muted-foreground sm:table-cell'>
-                              {format(o.createdAt, "d MMM yyyy, HH:mm", { locale: es })}
+                              {format(o.createdAt, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })}
                             </TableCell>
                             <TableCell className='hidden text-muted-foreground md:table-cell'>{o.branch.name}</TableCell>
                             <TableCell>
@@ -273,7 +274,7 @@ export default async function CustomerDetailPage(props: PageProps<'/app/[tenant]
                       <span className='min-w-0'>
                         <span className='block font-medium'>{PAYMENT_METHOD_LABEL[p.methodType] ?? p.methodType}</span>
                         <span className='block text-[0.65rem] text-muted-foreground'>
-                          {format(p.createdAt, "d MMM yyyy, HH:mm", { locale: es })}
+                          {format(p.createdAt, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })}
                           {p.user?.name && ` · ${p.user.name}`}
                         </span>
                         {p.note && <span className='block truncate text-muted-foreground'>{p.note}</span>}
@@ -295,7 +296,7 @@ export default async function CustomerDetailPage(props: PageProps<'/app/[tenant]
                 {customer.address ?? '—'}
               </Info>
               <Info icon={<ReceiptText />} label='Última compra'>
-                {customer.lastPurchaseAt ? format(customer.lastPurchaseAt, "d 'de' MMMM yyyy", { locale: es }) : '—'}
+                {customer.lastPurchaseAt ? format(customer.lastPurchaseAt, "d 'de' MMMM yyyy", { locale: es, in: tz(ctx.tenant.timezone) }) : '—'}
               </Info>
               <Info icon={<StickyNote />} label='Notas'>
                 <span className='whitespace-pre-line'>{customer.notes ?? '—'}</span>

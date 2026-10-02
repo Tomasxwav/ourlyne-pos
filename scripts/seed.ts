@@ -492,7 +492,9 @@ async function main() {
   if (process.env.DATABASE_URL) await (db.$client as { end: () => Promise<void> }).end()
 }
 
-main().catch((err) => {
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
   console.error(err)
   process.exit(1)
 })
