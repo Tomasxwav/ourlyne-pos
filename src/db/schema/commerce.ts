@@ -70,7 +70,7 @@ export const categories = pgTable(
 )
 
 export const PRODUCT_TYPES = ['product', 'service'] as const
-export const PRODUCT_UNITS = ['pz', 'kg', 'g', 'lt', 'ml', 'm', 'caja', 'paq'] as const
+export { PRODUCT_UNITS } from '../../lib/catalog'
 
 export const products = pgTable(
   'products',
