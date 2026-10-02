@@ -169,3 +169,28 @@ export function Pagination({
     </div>
   )
 }
+
+export function DateRangeFilter() {
+  const { params, update } = useUpdateParams()
+  const cls =
+    'h-8 rounded-md border border-input bg-input/20 px-2 text-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 dark:bg-input/30 dark:[color-scheme:dark]'
+  return (
+    <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
+      <input
+        type='date'
+        aria-label='Desde'
+        value={params.get('from') ?? ''}
+        onChange={(e) => update({ from: e.target.value || null })}
+        className={cls}
+      />
+      <span>a</span>
+      <input
+        type='date'
+        aria-label='Hasta'
+        value={params.get('to') ?? ''}
+        onChange={(e) => update({ to: e.target.value || null })}
+        className={cls}
+      />
+    </div>
+  )
+}

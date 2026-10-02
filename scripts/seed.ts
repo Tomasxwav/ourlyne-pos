@@ -364,7 +364,8 @@ async function seedDemoTenant() {
             { pricesIncludeTax: true },
           )
           const id = randomUUID()
-          const createdAt = setMinutes(setHours(day, between(8, 20)), between(0, 59))
+          const lastHour = isToday ? Math.max(8, Math.min(20, new Date().getHours() - 1)) : 20
+          const createdAt = setMinutes(setHours(day, between(8, lastHour)), between(0, 59))
           const customer = rand() < 0.35 ? pick(customerRows) : null
           const r = rand()
           const method = r < 0.5 ? cash : r < 0.88 ? card : transfer

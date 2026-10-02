@@ -38,7 +38,7 @@ export function StatTile({
         <p className='text-[0.65rem] font-medium tracking-[0.18em] text-muted-foreground uppercase'>{label}</p>
         {icon && <span className='text-muted-foreground [&_svg]:size-4'>{icon}</span>}
       </div>
-      <p className='mt-3 truncate font-heading text-xl font-semibold tracking-tight tabular-nums sm:text-2xl 2xl:text-3xl'>{value}</p>
+      <p className='mt-3 font-heading text-lg leading-tight font-semibold tracking-tight break-words tabular-nums sm:text-xl xl:text-2xl 2xl:text-3xl'>{value}</p>
       <div className='mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground'>
         {hasDelta && (
           <span
