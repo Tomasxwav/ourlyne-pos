@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { formatQty } from '@/lib/money'
 import { cn } from '@/lib/utils'
 import { getBranchStock, searchInventoryProducts, transferStock } from '../actions'
-import { ProductPicker, type PickerItem } from '../product-picker'
+import { ProductPicker, type PickerItem } from '@/components/app/product-picker'
 
 type Line = { product: PickerItem; quantity: string }
 

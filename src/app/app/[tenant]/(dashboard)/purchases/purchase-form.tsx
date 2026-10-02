@@ -13,7 +13,7 @@ import { NativeSelect } from '@/components/ui/native-select'
 import { Textarea } from '@/components/ui/textarea'
 import { centsToInput, formatMoney, formatQty, toCents } from '@/lib/money'
 import { cn } from '@/lib/utils'
-import { ProductPicker, type PickerItem } from '../inventory/product-picker'
+import { ProductPicker, type PickerItem } from '@/components/app/product-picker'
 import { savePurchaseAction, searchPurchaseProducts } from './actions'
 
 export type PurchaseFormValues = {

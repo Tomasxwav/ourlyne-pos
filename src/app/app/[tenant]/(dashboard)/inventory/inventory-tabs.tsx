@@ -1,4 +1,4 @@
-import { SectionTabs } from './section-tabs'
+import { SectionTabs } from '@/components/app/section-tabs'
 
 export function InventoryTabs({ slug, transfers }: { slug: string; transfers: boolean }) {
   const base = `/app/${slug}/inventory`
