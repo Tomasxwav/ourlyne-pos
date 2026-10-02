@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  serverExternalPackages: ['@electric-sql/pglite'],
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+  },
+}
 
-export default nextConfig;
+export default nextConfig
