@@ -1,6 +1,7 @@
 import 'server-only'
 import { subDays, startOfDay, format } from 'date-fns'
 import { and, desc, eq, gte, lt, ne, sql, type SQL } from 'drizzle-orm'
+import type { AnyPgColumn } from 'drizzle-orm/pg-core'
 import { db } from '@/db'
 import {
   customers,
@@ -17,7 +18,7 @@ export type DashboardRange = 7 | 30 | 90
 type Scope = { tenantId: string; branchId?: string; timezone: string }
 
 /** Fecha local del negocio para una columna timestamp almacenada en UTC. */
-export function localTs(col: SQL | typeof orders.createdAt, tz: string) {
+export function localTs(col: SQL | AnyPgColumn, tz: string) {
   // Literal (validado) para que GROUP BY reconozca expresiones idénticas.
   const safe = /^[A-Za-z0-9_/+-]+$/.test(tz) ? tz : 'UTC'
   return sql`((${col} AT TIME ZONE 'UTC') AT TIME ZONE '${sql.raw(safe)}')`

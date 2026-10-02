@@ -43,3 +43,6 @@ next-env.d.ts
 # local embedded postgres (PGlite)
 /.pglite
 !.env.example
+
+# local embedded postgres
+/.pgdata
