@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "node -e \"require('fs').rmSync('.pglite',{recursive:true,force:true})\" && pnpm db:migrate && pnpm db:seed",
+    "db:studio": "drizzle-kit studio",
+    "stripe:sync": "tsx scripts/stripe-sync.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
