@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format, formatDistanceToNow } from 'date-fns'
@@ -190,10 +191,10 @@ export default async function RegistersPage(props: PageProps<'/app/[tenant]/regi
                     </TableCell>
                     <TableCell className='text-muted-foreground'>{h.openedBy.name}</TableCell>
                     <TableCell className='hidden text-muted-foreground md:table-cell'>
-                      {format(h.openedAt, 'd MMM HH:mm', { locale: es })}
+                      {format(h.openedAt, 'd MMM HH:mm', { locale: es, in: tz(ctx.tenant.timezone) })}
                     </TableCell>
                     <TableCell className='hidden text-muted-foreground md:table-cell'>
-                      {h.closedAt ? format(h.closedAt, 'd MMM HH:mm', { locale: es }) : '—'}
+                      {h.closedAt ? format(h.closedAt, 'd MMM HH:mm', { locale: es, in: tz(ctx.tenant.timezone) }) : '—'}
                     </TableCell>
                     <TableCell className='text-right tabular-nums'>{money(h.expectedAmount ?? 0)}</TableCell>
                     <TableCell className='hidden text-right tabular-nums sm:table-cell'>{money(h.countedAmount ?? 0)}</TableCell>

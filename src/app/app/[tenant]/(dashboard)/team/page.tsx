@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -77,7 +78,7 @@ export default async function TeamPage(props: PageProps<'/app/[tenant]/team'>) {
                 {!m.isActive && <StatusBadge tone='danger'>Sin acceso</StatusBadge>}
               </div>
               <span className='hidden w-24 text-right text-xs text-muted-foreground md:block'>
-                {format(m.createdAt, 'd MMM yyyy', { locale: es })}
+                {format(m.createdAt, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}
               </span>
               <MemberActions
                 slug={slug}

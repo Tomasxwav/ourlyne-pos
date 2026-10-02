@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -135,7 +136,7 @@ export default async function TransfersPage(props: PageProps<'/app/[tenant]/inve
                     <p className='mt-1 line-clamp-2 text-muted-foreground'>{t.items}</p>
                     {extra && <p className='mt-1 italic'>{extra}</p>}
                     <p className='mt-1 text-[0.65rem] text-muted-foreground'>
-                      {format(t.createdAt, "d MMM yyyy, HH:mm", { locale: es })} · {t.userName ?? '—'} · {t.lines}{' '}
+                      {format(t.createdAt, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })} · {t.userName ?? '—'} · {t.lines}{' '}
                       {t.lines === 1 ? 'producto' : 'productos'} · {formatQty(Math.round(t.units * 1000) / 1000)} u.
                     </p>
                   </li>

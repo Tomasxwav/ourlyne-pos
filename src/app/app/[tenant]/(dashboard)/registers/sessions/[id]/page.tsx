@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
@@ -24,7 +25,7 @@ export default async function SessionPage(props: PageProps<'/app/[tenant]/regist
 
   const { session } = summary
   const money = (v: number) => formatMoney(v, ctx.tenant.currency)
-  const fmt = (d: Date | null) => (d ? format(d, "d MMM yyyy, HH:mm", { locale: es }) : '—')
+  const fmt = (d: Date | null) => (d ? format(d, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) }) : '—')
 
   return (
     <>

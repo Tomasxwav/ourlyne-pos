@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { folio, formatMoney, formatQty } from '@/lib/money'
@@ -11,6 +12,8 @@ export type ReceiptData = {
     header?: string | null
     footer?: string | null
     currency: string
+    /** Zona horaria del negocio (si se renderiza en el servidor). */
+    timezone?: string
   }
   branch?: string
   cashier?: string
@@ -54,7 +57,7 @@ export function Receipt({ data }: { data: ReceiptData }) {
       <div className='my-2 border-t border-dashed border-black' />
       <div className='flex justify-between'>
         <span>Ticket {folio('V', data.number)}</span>
-        <span>{format(data.date, 'dd/MM/yy HH:mm', { locale: es })}</span>
+        <span>{format(data.date, 'dd/MM/yy HH:mm', { locale: es, ...(data.business.timezone ? { in: tz(data.business.timezone) } : {}) })}</span>
       </div>
       {data.cashier && <p>Atendió: {data.cashier}</p>}
       {data.customer && <p>Cliente: {data.customer}</p>}

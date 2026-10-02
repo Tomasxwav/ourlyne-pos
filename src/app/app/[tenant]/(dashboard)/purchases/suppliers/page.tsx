@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -114,7 +115,7 @@ export default async function SuppliersPage(props: PageProps<'/app/[tenant]/purc
                     </Link>
                     <span className='block truncate text-[0.65rem] text-muted-foreground'>
                       {s.lastPurchase
-                        ? `Última compra ${format(s.lastPurchase, 'd MMM yyyy', { locale: es })}`
+                        ? `Última compra ${format(s.lastPurchase, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}`
                         : 'Sin compras'}
                     </span>
                   </TableCell>

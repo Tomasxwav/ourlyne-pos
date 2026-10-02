@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
@@ -72,7 +73,7 @@ export default async function EditProductPage(props: PageProps<'/app/[tenant]/pr
                 {movements.map((m) => (
                   <li key={m.id} className='flex items-center gap-3 px-4 py-2'>
                     <span className='w-28 text-muted-foreground'>
-                      {format(m.createdAt, "d MMM yy, HH:mm", { locale: es })}
+                      {format(m.createdAt, "d MMM yy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })}
                     </span>
                     <span className='flex-1'>
                       {MOVEMENT_LABEL[m.type]} · <span className='text-muted-foreground'>{m.branch.name}</span>

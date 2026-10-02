@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format, startOfDay, subDays } from 'date-fns'
@@ -63,7 +64,7 @@ export default async function ReportsPage(props: PageProps<'/app/[tenant]/report
     <>
       <PageHeader
         title='Reportes'
-        description={`Del ${format(from, "d 'de' MMMM", { locale: es })} al ${format(to, "d 'de' MMMM yyyy", { locale: es })}`}
+        description={`Del ${format(from, "d 'de' MMMM", { locale: es, in: tz(ctx.tenant.timezone) })} al ${format(to, "d 'de' MMMM yyyy", { locale: es, in: tz(ctx.tenant.timezone) })}`}
         actions={
           <a href={exportHref} className={buttonVariants({ variant: 'outline', size: 'lg' })}>
             <Download /> Exportar CSV

@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -62,7 +63,7 @@ export default async function PurchaseDetailPage(props: PageProps<'/app/[tenant]
   return (
     <>
       <PageHeader
-        eyebrow={format(purchase.createdAt, "EEEE d 'de' MMMM yyyy", { locale: es })}
+        eyebrow={format(purchase.createdAt, "EEEE d 'de' MMMM yyyy", { locale: es, in: tz(ctx.tenant.timezone) })}
         title={
           <>
             Compra <span className='whitespace-nowrap'>{folio('OC', purchase.number)}</span>
@@ -189,10 +190,10 @@ export default async function PurchaseDetailPage(props: PageProps<'/app/[tenant]
               <Info label='Sucursal'>{purchase.branch.name}</Info>
               <Info label='Creada por'>{purchase.createdBy?.name ?? '—'}</Info>
               {purchase.expectedAt && (
-                <Info label='Fecha esperada'>{format(purchase.expectedAt, 'd MMM yyyy', { locale: es })}</Info>
+                <Info label='Fecha esperada'>{format(purchase.expectedAt, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}</Info>
               )}
               {purchase.receivedAt && (
-                <Info label='Recibida'>{format(purchase.receivedAt, "d MMM yyyy, HH:mm", { locale: es })}</Info>
+                <Info label='Recibida'>{format(purchase.receivedAt, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })}</Info>
               )}
               {purchase.notes && <Info label='Notas'>{purchase.notes}</Info>}
             </CardContent>
@@ -210,7 +211,7 @@ export default async function PurchaseDetailPage(props: PageProps<'/app/[tenant]
                       <p className='font-medium'>{ACTION_LABEL[h.action] ?? h.action}</p>
                       {h.action === 'payment' && h.summary && <p className='text-muted-foreground'>{h.summary}</p>}
                       <p className='text-[0.65rem] text-muted-foreground'>
-                        {format(h.createdAt, "d MMM yyyy, HH:mm", { locale: es })} · {h.user?.name ?? '—'}
+                        {format(h.createdAt, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })} · {h.user?.name ?? '—'}
                       </p>
                     </li>
                   ))}

@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -149,7 +150,7 @@ export default async function OrdersPage(props: PageProps<'/app/[tenant]/orders'
                       </Link>
                     </TableCell>
                     <TableCell className='text-muted-foreground'>
-                      {format(o.createdAt, "d MMM yyyy, HH:mm", { locale: es })}
+                      {format(o.createdAt, "d MMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })}
                     </TableCell>
                     <TableCell className='hidden md:table-cell'>{o.customer ?? <span className='text-muted-foreground'>Público en general</span>}</TableCell>
                     <TableCell className='hidden text-muted-foreground lg:table-cell'>{o.cashier ?? '—'}</TableCell>

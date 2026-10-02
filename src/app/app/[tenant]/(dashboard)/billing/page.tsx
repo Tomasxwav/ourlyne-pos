@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -109,14 +110,14 @@ export default async function BillingPage(props: PageProps<'/app/[tenant]/billin
             <div className='grid gap-1 text-xs text-muted-foreground'>
               {ctx.billing.status === 'trialing' && sub?.trialEndsAt && (
                 <p>
-                  Prueba hasta el <strong className='text-foreground'>{format(sub.trialEndsAt, "d 'de' MMMM yyyy", { locale: es })}</strong>
+                  Prueba hasta el <strong className='text-foreground'>{format(sub.trialEndsAt, "d 'de' MMMM yyyy", { locale: es, in: tz(ctx.tenant.timezone) })}</strong>
                   {ctx.billing.trialDaysLeft !== null && ` (${ctx.billing.trialDaysLeft} días)`}
                 </p>
               )}
               {sub?.currentPeriodEnd && ctx.billing.status !== 'trialing' && (
                 <p>
                   {sub.cancelAtPeriodEnd ? 'Termina el' : 'Próxima renovación:'}{' '}
-                  <strong className='text-foreground'>{format(sub.currentPeriodEnd, "d 'de' MMMM yyyy", { locale: es })}</strong>
+                  <strong className='text-foreground'>{format(sub.currentPeriodEnd, "d 'de' MMMM yyyy", { locale: es, in: tz(ctx.tenant.timezone) })}</strong>
                 </p>
               )}
               {ctx.billing.warning && <p className='text-destructive'>{ctx.billing.warning}</p>}
@@ -194,7 +195,7 @@ export default async function BillingPage(props: PageProps<'/app/[tenant]/billin
           <CardContent className='divide-y px-0 text-xs'>
             {invoices.map((i) => (
               <div key={i.id} className='flex items-center gap-3 px-4 py-2.5'>
-                <span className='w-28 text-muted-foreground'>{format(i.date, 'd MMM yyyy', { locale: es })}</span>
+                <span className='w-28 text-muted-foreground'>{format(i.date, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}</span>
                 <span className='flex-1 font-mono'>{i.number ?? i.id}</span>
                 <StatusBadge tone={i.status === 'paid' ? 'success' : 'warning'}>{i.status === 'paid' ? 'Pagada' : (i.status ?? '—')}</StatusBadge>
                 <span className='w-24 text-right tabular-nums'>{formatMoney(i.amount, i.currency)}</span>

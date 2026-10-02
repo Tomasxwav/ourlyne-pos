@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -54,7 +55,7 @@ export default async function OrderDetailPage(props: PageProps<'/app/[tenant]/or
   return (
     <>
       <PageHeader
-        eyebrow={format(order.createdAt, "EEEE d 'de' MMMM yyyy, HH:mm", { locale: es })}
+        eyebrow={format(order.createdAt, "EEEE d 'de' MMMM yyyy, HH:mm", { locale: es, in: tz(ctx.tenant.timezone) })}
         title={
           <span className='flex items-center gap-3'>
             Venta {folio('V', order.number)}
@@ -172,7 +173,7 @@ export default async function OrderDetailPage(props: PageProps<'/app/[tenant]/or
                 {order.refunds.map((r) => (
                   <div key={r.id} className='flex justify-between gap-2'>
                     <span>
-                      {format(r.createdAt, 'd MMM, HH:mm', { locale: es })} · {METHOD_LABEL[r.methodType]}
+                      {format(r.createdAt, 'd MMM, HH:mm', { locale: es, in: tz(ctx.tenant.timezone) })} · {METHOD_LABEL[r.methodType]}
                       {r.reason && <span className='block text-muted-foreground'>{r.reason}</span>}
                       <span className='block text-[0.65rem] text-muted-foreground'>
                         {r.user?.name} · {r.restock ? 'con reingreso' : 'sin reingreso'}
@@ -220,6 +221,7 @@ export default async function OrderDetailPage(props: PageProps<'/app/[tenant]/or
                   header: ctx.tenant.receiptHeader,
                   footer: ctx.tenant.receiptFooter,
                   currency: ctx.tenant.currency,
+                  timezone: ctx.tenant.timezone,
                 },
                 branch: order.branch.name,
                 cashier: order.cashier?.name,

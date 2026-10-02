@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format, startOfMonth } from 'date-fns'
@@ -141,7 +142,7 @@ export default async function PurchasesPage(props: PageProps<'/app/[tenant]/purc
         <StatTile
           label='Compras del mes'
           value={money(stats.month)}
-          hint={`${formatNumber(stats.monthCount)} ${stats.monthCount === 1 ? 'orden' : 'órdenes'} en ${format(monthStart, 'MMMM', { locale: es })}`}
+          hint={`${formatNumber(stats.monthCount)} ${stats.monthCount === 1 ? 'orden' : 'órdenes'} en ${format(monthStart, 'MMMM', { locale: es, in: tz(ctx.tenant.timezone) })}`}
         />
         <Link href={`${base}?status=draft`} className='rounded-xl focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-none'>
           <StatTile label='Borradores' value={formatNumber(stats.drafts)} hint='Sin emitir' />
@@ -211,17 +212,17 @@ export default async function PurchasesPage(props: PageProps<'/app/[tenant]/purc
                     <TableCell className='max-w-48'>
                       <span className='block truncate'>{p.supplier ?? <span className='text-muted-foreground'>Sin proveedor</span>}</span>
                       <span className='block text-[0.65rem] text-muted-foreground md:hidden'>
-                        {format(p.createdAt, 'd MMM yyyy', { locale: es })}
+                        {format(p.createdAt, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}
                       </span>
                     </TableCell>
                     {multiBranch && <TableCell className='hidden text-muted-foreground xl:table-cell'>{p.branch}</TableCell>}
                     <TableCell className='hidden text-muted-foreground md:table-cell'>
-                      <span className='block'>Creada {format(p.createdAt, 'd MMM yyyy', { locale: es })}</span>
+                      <span className='block'>Creada {format(p.createdAt, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}</span>
                       <span className='block text-[0.65rem]'>
                         {p.receivedAt
-                          ? `Recibida ${format(p.receivedAt, 'd MMM', { locale: es })}`
+                          ? `Recibida ${format(p.receivedAt, 'd MMM', { locale: es, in: tz(ctx.tenant.timezone) })}`
                           : p.expectedAt && p.status !== 'cancelled'
-                            ? `Esperada ${format(p.expectedAt, 'd MMM', { locale: es })}`
+                            ? `Esperada ${format(p.expectedAt, 'd MMM', { locale: es, in: tz(ctx.tenant.timezone) })}`
                             : ''}
                       </span>
                     </TableCell>

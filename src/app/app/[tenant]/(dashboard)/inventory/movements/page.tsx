@@ -1,3 +1,4 @@
+import { tz } from '@date-fns/tz'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -202,7 +203,7 @@ export default async function MovementsPage(props: PageProps<'/app/[tenant]/inve
                 return (
                   <TableRow key={m.id}>
                     <TableCell className='whitespace-nowrap text-muted-foreground'>
-                      {format(m.createdAt, 'd MMM yyyy', { locale: es })}
+                      {format(m.createdAt, 'd MMM yyyy', { locale: es, in: tz(ctx.tenant.timezone) })}
                       <span className='block text-[0.65rem]'>{format(m.createdAt, 'HH:mm')}</span>
                     </TableCell>
                     <TableCell className='max-w-48'>
