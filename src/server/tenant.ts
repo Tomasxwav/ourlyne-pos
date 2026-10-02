@@ -78,7 +78,13 @@ export const getTenantContext = cache(async (slug: string) => {
     isOwner: member.role.key === 'owner',
     plan,
     subscription: subscription ?? null,
-    billing: getBillingState(subscription, plan),
+    billing: tenant.suspendedAt
+      ? {
+          ...getBillingState(subscription, plan),
+          active: false,
+          warning: 'Esta cuenta está suspendida. Contacta a soporte de Ourlyne.',
+        }
+      : getBillingState(subscription, plan),
     branch,
     branches: branchList,
     modules,
