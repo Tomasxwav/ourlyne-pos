@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { useMemo, useState, useTransition } from 'react'
 import { Banknote, CreditCard, HandCoins, Landmark, Loader2, Trash2, WalletCards, type LucideIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -46,22 +46,14 @@ export function PaymentDialog({
   const money = (v: number) => formatMoney(v, currency)
   const [lines, setLines] = useState<Line[]>([])
   const [method, setMethod] = useState<PosPaymentMethod | undefined>(methods[0])
-  const [amount, setAmount] = useState('')
+  // El padre cambia `key` al abrir, así el estado arranca limpio con el total.
+  const [amount, setAmount] = useState(() => (total / 100).toFixed(2))
   const [reference, setReference] = useState('')
   const [pending, start] = useTransition()
 
   const paid = lines.reduce((a, l) => a + l.amount, 0)
   const remaining = Math.max(0, total - paid)
   const change = Math.max(0, paid - total)
-
-  useEffect(() => {
-    if (open) {
-      setLines([])
-      setMethod(methods[0])
-      setAmount((total / 100).toFixed(2))
-      setReference('')
-    }
-  }, [open, total, methods])
 
   const quick = useMemo(() => {
     const opts = new Set<number>([remaining])

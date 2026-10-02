@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import {
   ArrowLeft,
   Barcode,
@@ -114,25 +114,18 @@ export function PosTerminal(props: {
   const [payOpen, setPayOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [receipt, setReceipt] = useState<ReceiptData | null>(null)
-  const [held, setHeld] = useState<Held[]>([])
+  const [payKey, setPayKey] = useState(0)
   const searchRef = useRef<HTMLInputElement>(null)
   const holdKey = `ol_hold_${slug}`
-
-  useEffect(() => {
-    try {
-      setHeld(JSON.parse(localStorage.getItem(holdKey) ?? '[]'))
-    } catch {
-      setHeld([])
-    }
-  }, [holdKey])
+  const held = useHeldOrders(holdKey)
 
   const persistHeld = (next: Held[]) => {
-    setHeld(next)
     try {
       localStorage.setItem(holdKey, JSON.stringify(next))
     } catch {
       /* almacenamiento no disponible */
     }
+    window.dispatchEvent(new Event(HELD_EVENT))
   }
 
   const productById = useMemo(() => new Map(props.products.map((p) => [p.id, p])), [props.products])
@@ -185,7 +178,10 @@ export function PosTerminal(props: {
     )
   }
 
-  const discount: OrderDiscount | null = coupon ? { type: coupon.type, value: coupon.value } : manual
+  const discount = useMemo<OrderDiscount | null>(
+    () => (coupon ? { type: coupon.type, value: coupon.value } : manual),
+    [coupon, manual],
+  )
   const totals = useMemo(
     () =>
       computeTotals(
@@ -256,6 +252,7 @@ export function PosTerminal(props: {
     if (!props.billingActive) return void toast.error('Tu suscripción no está activa.')
     if (!lines.length) return void toast.info('Agrega productos al ticket')
     setCartOpen(false)
+    setPayKey((k) => k + 1)
     setPayOpen(true)
   }
 
@@ -515,6 +512,7 @@ export function PosTerminal(props: {
       </Sheet>
 
       <PaymentDialog
+        key={payKey}
         open={payOpen}
         onOpenChange={setPayOpen}
         slug={slug}
@@ -563,17 +561,53 @@ function CategoryChip({
   )
 }
 
+const HELD_EVENT = 'ol-held-change'
+const subscribeHeld = (cb: () => void) => {
+  window.addEventListener('storage', cb)
+  window.addEventListener(HELD_EVENT, cb)
+  return () => {
+    window.removeEventListener('storage', cb)
+    window.removeEventListener(HELD_EVENT, cb)
+  }
+}
+
+/** Ventas en espera persistidas en localStorage (sin desajustes de hidratación). */
+function useHeldOrders(key: string): Held[] {
+  const raw = useSyncExternalStore(
+    subscribeHeld,
+    () => {
+      try {
+        return localStorage.getItem(key) ?? '[]'
+      } catch {
+        return '[]'
+      }
+    },
+    () => '[]',
+  )
+  return useMemo(() => {
+    try {
+      return JSON.parse(raw) as Held[]
+    } catch {
+      return []
+    }
+  }, [raw])
+}
+
+const subscribeMinute = (cb: () => void) => {
+  const t = setInterval(cb, 30_000)
+  return () => clearInterval(t)
+}
+
 function Clockface() {
-  const [now, setNow] = useState<Date | null>(null)
-  useEffect(() => {
-    setNow(new Date())
-    const t = setInterval(() => setNow(new Date()), 30_000)
-    return () => clearInterval(t)
-  }, [])
+  const now = useSyncExternalStore(
+    subscribeMinute,
+    () => new Date().toISOString().slice(0, 16),
+    () => null,
+  )
   return (
     <span className='hidden items-center gap-1 px-2 text-xs text-muted-foreground tabular-nums xl:flex'>
       <Clock className='size-3.5' />
-      {now?.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
+      {now && new Date(now + ':00Z').toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
     </span>
   )
 }
