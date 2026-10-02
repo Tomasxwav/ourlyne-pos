@@ -52,7 +52,7 @@ import {
 } from '@/components/ui/sidebar'
 import { authClient } from '@/lib/auth-client'
 import type { NavIcon, NavItem } from '@/lib/navigation'
-import { cn } from '@/lib/utils'
+import { cn, initials } from '@/lib/utils'
 
 const ICONS: Record<NavIcon, LucideIcon> = {
   LayoutDashboard,
@@ -73,14 +73,6 @@ const ICONS: Record<NavIcon, LucideIcon> = {
 }
 
 export type ShellTenant = { id: string; slug: string; name: string; logoUrl: string | null; role: string }
-
-export function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? '')
-    .join('')
-}
 
 export function AppSidebar({
   slug,
