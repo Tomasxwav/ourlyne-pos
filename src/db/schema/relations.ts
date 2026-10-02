@@ -15,6 +15,7 @@ import {
   cashMovements,
   categories,
   coupons,
+  customerPayments,
   customers,
   expenseCategories,
   expenses,
@@ -155,6 +156,15 @@ export const stockMovementRelations = relations(stockMovements, ({ one }) => ({
 
 export const customerRelations = relations(customers, ({ many }) => ({
   orders: many(orders),
+  payments: many(customerPayments),
+}))
+
+export const customerPaymentRelations = relations(customerPayments, ({ one }) => ({
+  customer: one(customers, {
+    fields: [customerPayments.customerId],
+    references: [customers.id],
+  }),
+  user: one(user, { fields: [customerPayments.userId], references: [user.id] }),
 }))
 
 export const supplierRelations = relations(suppliers, ({ many }) => ({

@@ -498,12 +498,40 @@ export const refunds = pgTable(
       { onDelete: 'set null' },
     ),
     amount: integer('amount').notNull(),
+    /** Cómo se devolvió el dinero (efectivo sale de la caja). */
+    methodType: text('method_type', { enum: PAYMENT_METHOD_TYPES })
+      .notNull()
+      .default('cash'),
     reason: text('reason'),
     restock: boolean('restock').notNull().default(true),
     userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
     createdAt: createdAt(),
   },
   (t) => [index('refunds_tenant_idx').on(t.tenantId, t.createdAt)],
+)
+
+/** Abonos de clientes a su saldo de crédito. */
+export const customerPayments = pgTable(
+  'customer_payments',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    tenantId: tenantId(),
+    customerId: uuid('customer_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'cascade' }),
+    registerSessionId: uuid('register_session_id').references(
+      () => registerSessions.id,
+      { onDelete: 'set null' },
+    ),
+    amount: integer('amount').notNull(),
+    methodType: text('method_type', { enum: PAYMENT_METHOD_TYPES })
+      .notNull()
+      .default('cash'),
+    note: text('note'),
+    userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+    createdAt: createdAt(),
+  },
+  (t) => [index('customer_payments_customer_idx').on(t.customerId)],
 )
 
 /* ── Gastos ───────────────────────────────────────────────────────────── */
