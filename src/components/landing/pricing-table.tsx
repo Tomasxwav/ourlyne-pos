@@ -266,7 +266,7 @@ export default function PricingTable({ plans }: { plans: PricingPlan[] }) {
         <p className='mt-10 text-center text-xs text-foreground/50'>
           ¿Necesitas una integración especial o ayuda para migrar?{' '}
           <a
-            href='mailto:hola@ourlyne.com'
+            href='mailto:contacto@ourlyne.com'
             className='font-medium text-foreground underline decoration-gold underline-offset-4 hover:text-gold-deep dark:hover:text-gold'
           >
             Escríbenos

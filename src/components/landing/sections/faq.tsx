@@ -93,10 +93,10 @@ export default function Faq() {
           <p className='mt-4 max-w-sm font-abeezee text-sm text-foreground/65'>
             ¿No encuentras tu respuesta? Escríbenos a{' '}
             <a
-              href='mailto:hola@ourlyne.com'
+              href='mailto:contacto@ourlyne.com'
               className='font-medium text-foreground underline decoration-gold underline-offset-4'
             >
-              hola@ourlyne.com
+              contacto@ourlyne.com
             </a>{' '}
             y te respondemos en español.
           </p>

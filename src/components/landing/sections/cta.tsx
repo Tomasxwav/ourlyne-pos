@@ -131,7 +131,7 @@ export default function CTA() {
             <ArrowUpRight data-icon='inline-end' />
           </Link>
           <a
-            href='mailto:hola@ourlyne.com'
+            href='mailto:contacto@ourlyne.com'
             data-magnetic='0.45'
             className={buttonVariants({
               variant: 'outline',

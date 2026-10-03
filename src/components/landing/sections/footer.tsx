@@ -24,8 +24,8 @@ const COLUMNS = [
   {
     title: 'Compañía',
     links: [
-      { label: 'hola@ourlyne.com', href: 'mailto:hola@ourlyne.com', internal: false },
-      { label: 'Hablar con ventas', href: 'mailto:hola@ourlyne.com', internal: false },
+      { label: 'contacto@ourlyne.com', href: 'mailto:contacto@ourlyne.com', internal: false },
+      { label: 'Hablar con ventas', href: 'mailto:contacto@ourlyne.com', internal: false },
     ],
   },
   {
